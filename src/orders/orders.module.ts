@@ -6,13 +6,13 @@ import { envs, ORDERS_SERVICE } from 'src/config';
 @Module({
   imports: [
     ClientsModule.register([
-      { 
+      {
         name: ORDERS_SERVICE,
         transport: Transport.TCP,
         options: {
           host: envs.ORDERS_MICROSERVICE_HOST,
-          port: envs.ORDERS_MICROSERVICE_PORT
-        }
+          port: envs.ORDERS_MICROSERVICE_PORT,
+        },
       },
     ]),
   ],

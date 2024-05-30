@@ -15,7 +15,7 @@ const envsSchema = z
     PRODUCTS_MICROSERVICE_HOST: z.coerce.string(),
     PRODUCTS_MICROSERVICE_PORT: z.coerce.number(),
     ORDERS_MICROSERVICE_HOST: z.coerce.string(),
-    ORDERS_MICROSERVICE_PORT: z.coerce.number()
+    ORDERS_MICROSERVICE_PORT: z.coerce.number(),
   })
   .passthrough();
 

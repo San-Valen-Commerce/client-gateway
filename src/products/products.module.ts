@@ -6,16 +6,16 @@ import { envs, PRODUCTS_SERVICE } from 'src/config';
 @Module({
   imports: [
     ClientsModule.register([
-      { 
+      {
         name: PRODUCTS_SERVICE,
         transport: Transport.TCP,
         options: {
           host: envs.PRODUCTS_MICROSERVICE_HOST,
-          port: envs.PRODUCTS_MICROSERVICE_PORT
-        }
+          port: envs.PRODUCTS_MICROSERVICE_PORT,
+        },
       },
     ]),
   ],
-  controllers: [ProductsController]
+  controllers: [ProductsController],
 })
 export class ProductsModule {}
