@@ -63,7 +63,7 @@ export class ProductsController {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'update_product' }, { 
           id: id, 
-          ...updateProductDto 
+          ...updateProductDto
         })
       )
 
