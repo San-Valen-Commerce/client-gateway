@@ -22,14 +22,14 @@ import { PaginationDto } from 'src/common';
 })
 export class OrdersController {
   constructor(
-    @Inject(ORDERS_SERVICE) private readonly productsClient: ClientProxy,
+    @Inject(ORDERS_SERVICE) private readonly ordersClient: ClientProxy,
   ) {}
 
   @Post()
   async create(@Body() createOrderDto: CreateOrderDto) {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'create_order' }, createOrderDto),
+        this.ordersClient.send({ cmd: 'create_order' }, createOrderDto),
       );
 
       return result;
@@ -42,7 +42,7 @@ export class OrdersController {
   async findAll(@Query() paginationDto: PaginationDto) {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'list_orders' }, paginationDto),
+        this.ordersClient.send({ cmd: 'list_orders' }, paginationDto),
       );
 
       return result;
@@ -55,7 +55,7 @@ export class OrdersController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'get_one_order' }, { id }),
+        this.ordersClient.send({ cmd: 'get_one_order' }, { id }),
       );
 
       return result;
@@ -71,7 +71,7 @@ export class OrdersController {
   ) {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send(
+        this.ordersClient.send(
           { cmd: 'change_order_status' },
           {
             id,
