@@ -1,4 +1,4 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -16,7 +16,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalFilters(new RpcCustomExceptionFilter())
+  app.useGlobalFilters(new RpcCustomExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('San Valens Commerce API')
