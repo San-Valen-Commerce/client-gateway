@@ -10,11 +10,13 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
 import { ORDERS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { PaginationDto } from 'src/common';
+import { OrderPaginationDto, CreateOrderDto } from './dto';
+import { StatusDto } from './dto/status.dto';
+import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { STATUS_ENUM } from './entities/order.entity';
 
 @Controller({
   path: 'orders',
@@ -26,6 +28,12 @@ export class OrdersController {
   ) {}
 
   @Post()
+  @ApiTags('orders')
+  @ApiOperation({ summary: 'Create new Order' })
+  @ApiBody({
+    type: CreateOrderDto,
+    description: 'JSON structrure to create a new order',
+  })
   async create(@Body() createOrderDto: CreateOrderDto) {
     try {
       const result = await firstValueFrom(
@@ -39,10 +47,33 @@ export class OrdersController {
   }
 
   @Get()
-  async findAll(@Query() paginationDto: PaginationDto) {
+  @ApiTags('orders')
+  @ApiOperation({ summary: 'List Orders' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Items per page',
+    example: 10,
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    enum: STATUS_ENUM,
+    description: 'Status',
+    example: 'pending',
+  })
+  async findAll(@Query() orderPaginationDto: OrderPaginationDto) {
     try {
       const result = await firstValueFrom(
-        this.ordersClient.send({ cmd: 'list_orders' }, paginationDto),
+        this.ordersClient.send({ cmd: 'list_orders' }, orderPaginationDto),
       );
 
       return result;
@@ -52,6 +83,8 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @ApiTags('orders')
+  @ApiOperation({ summary: 'Get Order By Id' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
       const result = await firstValueFrom(
@@ -65,9 +98,15 @@ export class OrdersController {
   }
 
   @Patch(':id/update-status')
+  @ApiTags('orders')
+  @ApiOperation({ summary: 'Update Api Status' })
+  @ApiBody({
+    type: StatusDto,
+    description: 'Statua of the order',
+  })
   async updateStatus(
     @Param('id', ParseIntPipe) id: string,
-    @Body() body: { status: string },
+    @Body() statusDto: StatusDto,
   ) {
     try {
       const result = await firstValueFrom(
@@ -75,7 +114,7 @@ export class OrdersController {
           { cmd: 'change_order_status' },
           {
             id,
-            status: body.status,
+            status: statusDto.status,
           },
         ),
       );

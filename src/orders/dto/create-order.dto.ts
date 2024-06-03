@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsNotEmpty } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { IOrder, Status, STATUS_LIST } from '../entities/order.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -28,6 +28,7 @@ export class CreateOrderDto implements ICreateOrder {
 
   @IsNotEmpty()
   @IsIn(STATUS_LIST)
+  @IsOptional()
   @ApiProperty({
     example: 'pending',
     description: 'Status of the order.',

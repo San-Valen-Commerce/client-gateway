@@ -8,7 +8,6 @@ import {
   Min,
   Max,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
 import { Category, CATEGORY_LIST, IProduct } from '../entities/product.entity';
 
 interface ICreateProduct extends Omit<IProduct, 'id' | 'available'> {}
@@ -69,7 +68,6 @@ export class CreateProductDto implements ICreateProduct {
     default: 0,
     format: 'float',
   })
-  @Transform(({ value }) => Number((value * 100).toFixed(0)))
   rating!: number;
 
   @IsNotEmpty()
