@@ -8,11 +8,15 @@ import {
   Min,
   Max,
 } from 'class-validator';
-import { Category, CATEGORY_LIST, IProduct } from '../entities/product.entity';
+import {
+  Category,
+  CATEGORY_LIST,
+  IProductEntity,
+} from '../entities/product.entity';
 
-interface ICreateProduct extends Omit<IProduct, 'id' | 'available'> {}
+interface ICreateProductDto extends Omit<IProductEntity, 'id' | 'available'> {}
 
-export class CreateProductDto implements ICreateProduct {
+export class CreateProductDto implements ICreateProductDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({

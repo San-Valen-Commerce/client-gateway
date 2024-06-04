@@ -44,7 +44,7 @@ export class ProductsController {
     type: CreateProductDto,
     description: 'JSON structrure to create a new product',
   })
-  async create(@Body() createProductDto: CreateProductDto) {
+  async create(@Body() createProductDto: CreateProductDto): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'create_product' }, createProductDto),
@@ -73,7 +73,7 @@ export class ProductsController {
     description: 'Items per page',
     example: 10,
   })
-  async findAll(@Query() paginationDto: PaginationDto) {
+  async findAll(@Query() paginationDto: PaginationDto): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'list_products' }, paginationDto),
@@ -88,7 +88,7 @@ export class ProductsController {
   @Get(':id')
   @ApiTags('products')
   @ApiOperation({ summary: 'Get a product by its id if its available' })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'get_one_product' }, { id }),
@@ -110,7 +110,7 @@ export class ProductsController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
-  ) {
+  ): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send(
@@ -131,7 +131,7 @@ export class ProductsController {
   @Delete(':id')
   @ApiTags('products')
   @ApiOperation({ summary: 'Hard deletes a product fromt the database' })
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'delete_hard_product' }, { id }),
@@ -148,7 +148,7 @@ export class ProductsController {
   @ApiOperation({
     summary: 'Soft deletes a product, only set available = false',
   })
-  async softRemove(@Param('id', ParseIntPipe) id: number) {
+  async softRemove(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
         this.productsClient.send({ cmd: 'delete_soft_product' }, { id }),
