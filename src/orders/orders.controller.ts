@@ -10,7 +10,7 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ORDERS_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { OrderPaginationDto, CreateOrderDto } from './dto';
@@ -23,9 +23,7 @@ import { STATUS_ENUM } from './entities/order.entity';
   version: '1',
 })
 export class OrdersController {
-  constructor(
-    @Inject(ORDERS_SERVICE) private readonly ordersClient: ClientProxy,
-  ) {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Post()
   @ApiTags('orders')
@@ -37,7 +35,7 @@ export class OrdersController {
   async create(@Body() createOrderDto: CreateOrderDto) {
     try {
       const result = await firstValueFrom(
-        this.ordersClient.send({ cmd: 'create_order' }, createOrderDto),
+        this.client.send({ cmd: 'create_order' }, createOrderDto),
       );
 
       return result;
@@ -73,7 +71,7 @@ export class OrdersController {
   async findAll(@Query() orderPaginationDto: OrderPaginationDto) {
     try {
       const result = await firstValueFrom(
-        this.ordersClient.send({ cmd: 'list_orders' }, orderPaginationDto),
+        this.client.send({ cmd: 'list_orders' }, orderPaginationDto),
       );
 
       return result;
@@ -88,7 +86,7 @@ export class OrdersController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
       const result = await firstValueFrom(
-        this.ordersClient.send({ cmd: 'get_one_order' }, { id }),
+        this.client.send({ cmd: 'get_one_order' }, { id }),
       );
 
       return result;
@@ -110,7 +108,7 @@ export class OrdersController {
   ) {
     try {
       const result = await firstValueFrom(
-        this.ordersClient.send(
+        this.client.send(
           { cmd: 'change_order_status' },
           {
             id,

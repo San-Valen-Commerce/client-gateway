@@ -3,23 +3,20 @@ import { z } from 'zod';
 
 interface EnvVars {
   PORT: number;
-  PRODUCTS_MICROSERVICE_HOST: string;
-  PRODUCTS_MICROSERVICE_PORT: number;
-  ORDERS_MICROSERVICE_HOST: string;
-  ORDERS_MICROSERVICE_PORT: number;
+  NATS_SERVERS: string[];
 }
 
 const envsSchema = z
   .object({
     PORT: z.coerce.number(),
-    PRODUCTS_MICROSERVICE_HOST: z.coerce.string(),
-    PRODUCTS_MICROSERVICE_PORT: z.coerce.number(),
-    ORDERS_MICROSERVICE_HOST: z.coerce.string(),
-    ORDERS_MICROSERVICE_PORT: z.coerce.number(),
+    NATS_SERVERS: z.array(z.coerce.string()),
   })
   .passthrough();
 
-const envVars = envsSchema.parse(process.env);
+const envVars = envsSchema.parse({
+  ...process.env,
+  NATS_SERVERS: process.env.NATS_SERVERS?.split(','),
+});
 
 export const envs: EnvVars = {
   ...envVars,

@@ -14,7 +14,7 @@ import {
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { PaginationDto } from 'src/common';
-import { PRODUCTS_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import {
   ApiTags,
@@ -29,9 +29,7 @@ import {
   version: '1',
 })
 export class ProductsController {
-  constructor(
-    @Inject(PRODUCTS_SERVICE) private readonly productsClient: ClientProxy,
-  ) {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Post()
   @ApiTags('products')
@@ -47,7 +45,7 @@ export class ProductsController {
   async create(@Body() createProductDto: CreateProductDto): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'create_product' }, createProductDto),
+        this.client.send({ cmd: 'create_product' }, createProductDto),
       );
 
       return result;
@@ -76,7 +74,7 @@ export class ProductsController {
   async findAll(@Query() paginationDto: PaginationDto): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'list_products' }, paginationDto),
+        this.client.send({ cmd: 'list_products' }, paginationDto),
       );
 
       return result;
@@ -91,7 +89,7 @@ export class ProductsController {
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'get_one_product' }, { id }),
+        this.client.send({ cmd: 'get_one_product' }, { id }),
       );
 
       return result;
@@ -113,7 +111,7 @@ export class ProductsController {
   ): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send(
+        this.client.send(
           { cmd: 'update_product' },
           {
             id: id,
@@ -134,7 +132,7 @@ export class ProductsController {
   async remove(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'delete_hard_product' }, { id }),
+        this.client.send({ cmd: 'delete_hard_product' }, { id }),
       );
 
       return result;
@@ -151,7 +149,7 @@ export class ProductsController {
   async softRemove(@Param('id', ParseIntPipe) id: number): Promise<any> {
     try {
       const result = await firstValueFrom(
-        this.productsClient.send({ cmd: 'delete_soft_product' }, { id }),
+        this.client.send({ cmd: 'delete_soft_product' }, { id }),
       );
 
       return result;
