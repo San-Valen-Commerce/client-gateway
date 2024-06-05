@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Inject,
-  BadRequestException,
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
@@ -39,8 +38,8 @@ export class OrdersController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 
@@ -75,8 +74,8 @@ export class OrdersController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 
@@ -118,8 +117,8 @@ export class OrdersController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 }

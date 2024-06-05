@@ -49,8 +49,8 @@ export class ProductsController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 
@@ -78,8 +78,8 @@ export class ProductsController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 
@@ -121,8 +121,8 @@ export class ProductsController {
       );
 
       return result;
-    } catch (error) {
-      throw new BadRequestException(error);
+    } catch (error: any) {
+      throw new RpcException(error);
     }
   }
 
